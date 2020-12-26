@@ -57,7 +57,7 @@ print(type(art.loc[:,"Title":"Nationality"])) #prints type -> Dataframe
 
 #Use value_coutns in Series 
 nat = art["Nationality"]
-nat = nat.value_counts() #returns count of each element in Series
+nat = nat.value_counts(dropna = False) #returns count of each element in Series and counts NaN as well when dropna = False
 #use count in Series
 europe = nat[["(French)","(German)","(British)"]] #returns 3x1 matrix with the counts of each element
 print(type(europe)) #dtype64
@@ -132,8 +132,26 @@ for nat in nationality:
     art = art_2[art_2["Nationality"] == nat]
     art.sort_values("BeginDate",ascending = True)
     #art_nat[nat] = art.loc[1,"BeginDate"]
-    print(art.loc[0,"BeginDate"])
-print(art_nat)
+    #print(art.loc[0,"BeginDate"])
+#print(art_nat)
 # art = art_2[art_2["Nationality"] == "(Spanish)"]
 # print(art.head())
 # print(art.loc[1,"BeginDate"])
+
+#groupby -> applies a split and combine process
+grouped = art_2.groupby("Nationality") #groups by Nationality
+                                       #pandas.core.groupby.DataFrameGroupBy
+
+print(grouped.get_group("(French)")) #prints group with (French) nationality 
+print(grouped.mean()) #prints mean, in the columns with type int/float
+begin_date = grouped["BeginDate"] #pandas.core.groupby.SeriesGroupBy object
+print(type(begin_date)) #type -> <class 'pandas.core.groupby.generic.SeriesGroupBy'>
+print(begin_date.mean()) #mean for each Nationality group, by BeginDate
+dates = art_2.groupby("Nationality")
+begin_date = dates["BeginDate"]
+def dif(group):
+    return (group.max() - group.min())
+begin_date_diff = begin_date.agg(dif)
+print(begin_date_diff) #prints max-min begin date for each nationality
+print(begin_date.agg([np.mean,np.max,np.min]))
+print(art_2.groupby('Nationality')['BeginDate'].mean())
