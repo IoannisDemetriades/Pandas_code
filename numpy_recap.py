@@ -8,6 +8,8 @@ import numpy as np
 array = np.array([[1,2],[3,4],[5,6]]) #create a 3x2 array
 print(array[1,0])
 
+
+
 '''
 Single Instruction Multiple Data (SIMD) 
 It helps to process multiple data by performing the same operation during a processor cycle
